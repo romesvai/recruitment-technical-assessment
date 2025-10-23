@@ -29,8 +29,8 @@ class ResourceEntry:
 @app.route("/slugToTitle", methods=["GET"])
 def slug_to_title():
     slug = request.args.get("slug")
-    # TODO: Convert hyphenated lowercase string into title-cased string
-    return "", 200
+    capitalized_words = [word.capitalize() for word in slug.split("-")]
+    return " ".join(capitalized_words), 200
 
 # ==== Task 2 =================================================================
 @app.route("/projectEntry", methods=["POST"])
