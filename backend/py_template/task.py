@@ -1,4 +1,4 @@
-from flask import Flask, Response, jsonify, request
+from flask import Flask, request
 from typing import List, Dict, Union
 
 # ==== DO NOT CHANGE ==========================================================
@@ -48,9 +48,16 @@ def slug_to_title():
 # ==== Task 2 =================================================================
 @app.route("/projectEntry", methods=["POST"])
 def add_project_entry():
+    # Mock registry
+    registryData = [ProjectEntry("test1",[RequiredResource("req1",10)]),ProjectEntry("test2",[RequiredResource("req1",10)]),]
+    project_names = [project.name for project in registryData]
+
     data = request.get_json()
-    type = data.get("type")
+
     name = data.get("name")
+    if name in project_names:
+        return f"Project with name: {name},already exits in registry",400
+    type = data.get("type")
     if type != "project" and type != "resource":
         return "Entry type must match either project or resource",422
     if type == "project":
@@ -62,6 +69,9 @@ def add_project_entry():
         else:
             try:
                 requiredResources = [RequiredResource(resource.get("name"),resource.get("quantity")) for resource in requiredResources]
+                resources_names = [resource.name for resource in requiredResources]
+                if set(resources_names) != resources_names:
+                    return "Duplicate resource names are not allowed",400
                 project_entry = ProjectEntry(name,requiredResources=requiredResources)
                 # Add to DB
                 return str(project_entry),200
