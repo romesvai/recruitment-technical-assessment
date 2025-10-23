@@ -28,9 +28,10 @@ class ResourceEntry:
 # ==== Task 1 =================================================================
 @app.route("/slugToTitle", methods=["GET"])
 def slug_to_title():
-    slug = request.args.get("slug")
-    capitalized_words = [word.capitalize() for word in slug.split("-")]
-    return " ".join(capitalized_words), 200
+    slug = Slug(request.args.get("slug"))
+    capitalized_words = [word.capitalize() for word in slug.slug.split("-")]
+    converted_slug = Slug(" ".join(capitalized_words))
+    return converted_slug.slug, 200
 
 # ==== Task 2 =================================================================
 @app.route("/projectEntry", methods=["POST"])
