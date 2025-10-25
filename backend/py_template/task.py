@@ -1,5 +1,7 @@
 from flask import Flask, request
-from typing import List, Dict, Union
+from typing import List, Dict
+from utils import Utils
+
 
 # ==== DO NOT CHANGE ==========================================================
 app = Flask(__name__)
@@ -9,7 +11,11 @@ project_registry: Dict[str, Dict] = {}
 
 class Slug:
     def __init__(self, slug: str):
-        self.slug = slug
+        self._slug = slug
+
+    @property
+    def slug(self):
+        return self._slug
 
 class RequiredResource:
     def __init__(self,name,quantity):
@@ -40,10 +46,11 @@ class ResourceEntry:
 # ==== Task 1 =================================================================
 @app.route("/slugToTitle", methods=["GET"])
 def slug_to_title():
+    if request.args.get("slug") == None:
+        return "",200
     slug = Slug(request.args.get("slug"))
-    capitalized_words = [word.capitalize() for word in slug.slug.split("-")]
-    converted_slug = Slug(" ".join(capitalized_words))
-    return converted_slug.slug, 200
+    title = Utils.slug_to_title(slug)
+    return title, 200
 
 # ==== Task 2 =================================================================
 @app.route("/projectEntry", methods=["POST"])
