@@ -77,7 +77,7 @@ def add_project_entry():
             try:
                 requiredResources = [RequiredResource(resource.get("name"),resource.get("quantity")) for resource in requiredResources]
                 resources_names = [resource.name for resource in requiredResources]
-                if set(resources_names) != resources_names:
+                if len(set(resources_names)) != len(resources_names):
                     return "Duplicate resource names are not allowed",400
                 project_entry = ProjectEntry(name,requiredResources=requiredResources)
                 # Add to DB
