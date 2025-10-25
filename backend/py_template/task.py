@@ -71,8 +71,8 @@ def add_project_entry():
         if "requiredResources" not in data.keys():
             return "requiredResources is required",400
         requiredResources = data.get("requiredResources")
-        if len(requiredResources) == 0 or requiredResources == None:
-            return "At least one requiredResources (int) is needed", 400
+        if requiredResources == None:
+            return "requiredResources is required", 400
         else:
             try:
                 requiredResources = [RequiredResource(resource.get("name"),resource.get("quantity")) for resource in requiredResources]
